@@ -1,0 +1,62 @@
+
+
+{% extends "index.html" %}
+
+{% block content %}
+
+
+<div class="col-md-6 mx-auto">
+
+    <!-- form card login -->
+    <div class="card rounded-0">
+
+        <div class="card-header">
+            <h3 class="mb-0">Search by skill name</h3>
+        </div>
+        <div class="card-body">
+
+            <form class="form"  action = "/search" method = post >
+                {{ form.hidden_tag() }}
+
+
+                <div class="form-group">
+                    {{ form.skill_name.label }}
+                    {{ form.skill_name}}
+                </div>
+
+
+                {{ form.submit(class_="btn btn-success") }}
+            </form>
+        </div>
+        <!--/card-block-->
+    </div>
+    <!-- /form card login -->
+
+</div>
+
+{% if result %}
+<h3>Search result</h3>
+
+ <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Skill</th>
+                            <th scope="col">User count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in result %}
+                        <tr >
+                            <td> {{row[0] }} </td>
+                            <td> {{row[1]}} </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+{% endif %}
+
+
+
+{% endblock %}

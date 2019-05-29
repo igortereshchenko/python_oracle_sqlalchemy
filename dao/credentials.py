@@ -1,0 +1,5 @@
+username = 'developer'
+password = 'developer'
+host = '192.169.1.101'
+port='1521'
+service = 'orcl'

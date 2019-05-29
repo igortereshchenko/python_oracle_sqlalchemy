@@ -1,0 +1,35 @@
+
+
+{% extends "index.html" %}
+
+{% block content %}
+
+
+
+ <div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Skill name</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for skill in skills %}
+            <tr >
+                <td> {{skill.skill_name}} </td>
+                <td>
+                    <button type="button" class="btn btn-warning" name="btn_edit_user" data-user_id="{{skill.skill_name}}">Edit</button>
+                    <button type="button" class="btn btn-danger" name="btn_delete_user" data-user_id="{{skill.skill_name}}">Delete</button>
+                </td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td> <button type="button" class="btn btn-success" name="btn_new_skill">New Skill</button> </td>
+            </tr>
+        </tbody>
+    </table>
+ </div>
+
+    <!--<script src="{{ url_for('static', filename='js/skill.js') }}"></script>-->
+
+{% endblock %}
