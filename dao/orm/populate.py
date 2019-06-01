@@ -41,19 +41,28 @@ Boban = ormUser( user_name="Boban",
                )
 
 
+Biba = ormUser( user_name="Biba",
+               user_birthday='10-OCT-2011',
+               user_email='biba@gmail.com',
+               user_studybook='KM3333',
+               user_year='10-OCT-2017',
+               )
+
 
 Java = ormSkill(skill_name='Java')
 Oracle = ormSkill(skill_name='Oracle')
+Python = ormSkill(skill_name='Python')
 
 # create relations
 Bob.orm_skills.append(Java)
 Bob.orm_skills.append(Oracle)
+Bob.orm_skills.append(Python)
 
 Boba.orm_skills.append(Java)
 
 Boban.orm_skills.append(Oracle)
 
 # insert into database
-session.add_all([Java,Oracle,Boban,Boba,Bob])
+session.add_all([Java,Oracle,Python,Boban,Boba,Bob,Biba])
 
 session.commit()

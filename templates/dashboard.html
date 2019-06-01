@@ -1,0 +1,28 @@
+
+
+{% extends "index.html" %}
+
+{% block content %}
+
+    <h1>Bar ...</h1>
+    <div id="bar" class="bar">
+    </div>
+
+    <h1>Pie ...</h1>
+    <div id="pie" class="bar">
+    </div>
+
+    <script src="{{ url_for('static', filename='js/d3.v5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/plotly-latest.min.js') }}"></script>
+
+
+    <script type="text/javascript">
+        var graphs = {{graphsJSON | safe}};
+
+        for(var block_id in graphs) {
+            Plotly.plot(block_id, // the ID of the div, created above
+                        graphs[block_id],{});
+        }
+    </script>
+
+{% endblock %}

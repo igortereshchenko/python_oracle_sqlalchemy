@@ -3,6 +3,13 @@ from forms.search_form import SearchForm
 from dao.orm.model import *
 from dao.db import OracleDb
 from forms.user_form import UserForm
+from sqlalchemy.sql import func
+
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+import json
 
 app = Flask(__name__)
 app.secret_key = 'development key'
@@ -58,6 +65,77 @@ def search():
     else:
         return render_template('search.html', form = search_form, result=search_form.get_result())
 
+
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+
+    db = OracleDb()
+
+
+    # SELECT
+    #     ormUser.user_name,
+    #     count(ormUserSkill.skill_name) skill_count
+
+    # FROM ormUser LEFT OUTER JOIN ormUserSkill
+    #   ON  ormUser.user_id = ormUserSkill.user_id
+
+    # GROUP BY ormUser.user_id,ormUser.user_name
+
+
+    query1  = (
+                db.sqlalchemy_session.query(
+                                            ormUser.user_name,
+                                            func.count(ormUserSkill.skill_name).label('skill_count')
+                                          ).\
+                                    outerjoin(ormUserSkill).\
+                                    group_by(ormUser.user_id,ormUser.user_name)
+               ).all()
+
+
+
+
+    # SELECT
+    #     ormSkill.skill_name,
+    #     count(ormUserSkill.user_id) user_count
+
+    # FROM ormSkill LEFT OUTER JOIN ormUserSkill
+    #   ON  ormSkill.skill_name = ormUserSkill.skill_name
+
+    # GROUP BY ormSkill.skill_name
+
+    query2 = (
+        db.sqlalchemy_session.query(
+            ormSkill.skill_name,
+            func.count(ormUserSkill.user_id).label('user_count')
+        ). \
+            outerjoin(ormUserSkill). \
+            group_by(ormSkill.skill_name)
+    ).all()
+
+
+
+
+    names, skill_counts = zip(*query1)
+    bar = go.Bar(
+        x=names,
+        y=skill_counts
+    )
+
+    skills, user_count = zip(*query2)
+    pie = go.Pie(
+        labels=skills,
+        values=user_count
+    )
+
+
+
+    data = {
+                "bar":[bar],
+                "pie":[pie]
+           }
+    graphsJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template('dashboard.html', graphsJSON=graphsJSON)
 
 #     =================================================================================================
 
